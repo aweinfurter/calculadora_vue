@@ -1,47 +1,76 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { reactive } from 'vue';
+
+const estado = reactive({
+  numero1: 0,
+  numero2: 0,
+  operacao: '+',
+  resultado: 0,
+})
+
+const resultado = () => {
+  const { operacao, numero1, numero2 } = estado
+
+  switch (operacao) {
+    case '+':
+      estado.resultado = Number(numero1) + Number(numero2)
+      break;
+
+    case '-':
+      estado.resultado = numero1 - numero2
+      break;
+
+    case '*':
+      estado.resultado = numero1 * numero2
+      break;
+
+    case '/':
+      estado.resultado = numero1 / numero2
+      break;
+
+    default:
+      estado.resultado = 0
+  }
+}
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div class="container">
+    <header class="p-5 mb-4 mt-4 bg-dark rounded-3">
+      <h1 class="text-light">Calculadora - VueJs</h1>
+      <p class="text-light">
+        Tarefa do módulo 27 do curso de front-end da EBAC
+      </p>
+    </header>
+    <form>
+    <div class="row">
+      <div class="col-2">
+        <input class="form-control" type="number" placeholder="0" @input="evento => { estado.numero1 = evento.target.value; resultado(); }">
+      </div>
+      <div class="col-2">
+        <select class="form-select" @change="evento => { estado.operacao = evento.target.value; resultado(); }">
+          <option value="+">+</option>
+          <option value="-">-</option>
+          <option value="*">*</option>
+          <option value="/">/</option>
+        </select>
+      </div>
+      <div class="col-2">
+        <input class="form-control" type="number" placeholder="0" @input="evento => { estado.numero2 = evento.target.value; resultado(); }">
+      </div>
+      <div class="col-6">
+        <h3>
+          Resultado = {{ estado.resultado }}
+        </h3>
+      </div>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  </form>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.container {
+  max-width: 600px;
 }
 </style>
